@@ -1,22 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>NPS API Exercise</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://www.nps.gov/common/commonspot/templates/images/icons/favicon.ico" rel="shortcut icon">
     <link href="https://fonts.googleapis.com/css?family=PT+Serif" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css">
 </head>
 <body>
-<main>
+<main class="container">
     <header>
         <h1>National Park Lookup</h1>
     </header>
     <article>
+        <p>Look up which national parks are in each state!</p>
         <form class="stateChoice">
-           
+            <section class="scroll">
+            </section>
+            <p>Number of results (max. 50): <input class="limit" type="number" min="0" max="50" value="10"></p>
         </form>
+        <h2>Results:</h2>
+        <section class="results">
+        </section>
     </article>
 </main>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>

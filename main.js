@@ -60,14 +60,68 @@ const statesList = {
     WI: 'Wisconsin',
     WY: 'Wyoming'
 };
-console.log(typeof statesList);
-console.log(Object.keys(statesList).length);
+const apiKey = 'xZh8yIqwos2YqD9qmoiWf6SY2U9OvRmeKcr46WF9';
+
 function generateStateOptions() {
     for (let i=0; i<Object.keys(statesList).length; i++) {
-        console.log("Working loop");
-        $('.stateChoice').append(`<input type="checkbox" name="State" label="${Object.values(statesList)[i]}" value="${Object.keys(statesList)[i]}">${Object.values(statesList)[i]}<br>`);
-    };
-    console.log(Object.keys(statesList)[0]);
+        let stateCode = Object.keys(statesList)[i];
+        let stateName = Object.values(statesList)[i];
+
+        $('.scroll').append(`<input type="checkbox" class="state" id="${stateName}" value="${stateCode}"> ${stateName}<br>`);
+    }
 }
 
-$(generateStateOptions);
+function generateSubmitButton() {
+    $('.stateChoice').append(`<input type="submit" value="Submit">`);
+}
+
+function handleSubmitButton() {
+    $('form').on('submit', function(event) {
+        event.preventDefault();
+        generateFetchRequest();
+    });
+}
+
+function createUrl() {
+    let checkedItem = $('.state:checked').val().toLowerCase();
+    let maxInput = $('.limit').val();
+    return `https://api.nps.gov/api/v1/parks?api_key=${apiKey}&stateCode=${checkedItem}&limit=${maxInput}`;
+}
+
+function generateFetchRequest() {
+    fetch(createUrl())
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then(responseJson => handleDisplayResults(responseJson))
+        .catch(err => $('.results').empty().append('Something went wrong: ' + err.message));
+}
+
+function handleDisplayResults(responseJson) {
+    $('.results').empty();
+
+    let results = [];
+    for (let i = 0; i < responseJson.data.length; i++) {
+        results.push(`
+            <section class="park">
+                <b>Name:</b> ${responseJson.data[i].fullName}<br>
+                <b>Description:</b> ${responseJson.data[i].description}<br>
+                <b>Website:</b> <a href="afgadsfd" target="_blank">${responseJson.data[i].url}</a>
+            </section>
+        `);
+    }
+    results.join('');
+
+    $('.results').append(results);
+}
+
+
+function renderPage() {
+    generateStateOptions();
+    generateSubmitButton();
+    handleSubmitButton();
+}
+$(renderPage);
