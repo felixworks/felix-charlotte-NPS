@@ -83,9 +83,17 @@ function handleSubmitButton() {
 }
 
 function createUrl() {
-    let checkedItem = $('.state:checked').val().toLowerCase();
+    let checkedStates = [];
+
+    $(':checkbox:checked').each(function(i) {
+        checkedStates[i] = $(this).val().toLowerCase();
+    });
+
+    checkedStates.join(',');
+    console.log(checkedStates);
+
     let maxInput = $('.limit').val();
-    return `https://api.nps.gov/api/v1/parks?api_key=${apiKey}&stateCode=${checkedItem}&limit=${maxInput}`;
+    return `https://api.nps.gov/api/v1/parks?api_key=${apiKey}&stateCode=${checkedStates}&limit=${maxInput}`;
 }
 
 function generateFetchRequest() {
@@ -108,6 +116,7 @@ function handleDisplayResults(responseJson) {
         results.push(`
             <section class="park">
                 <b>Name:</b> ${responseJson.data[i].fullName}<br>
+                <b>Location:</b> ${responseJson.data[i].states}<br>
                 <b>Description:</b> ${responseJson.data[i].description}<br>
                 <b>Website:</b> <a href="afgadsfd" target="_blank">${responseJson.data[i].url}</a>
             </section>

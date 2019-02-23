@@ -4,12 +4,29 @@
 
 body {
     font-family: 'PT Serif', serif;
+    background-color: #ccc;
+    background-image: url('background.jpg');
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: repeat;
+    background-size: cover;
+}
+
+a, a:active {
+    color: #000;
+    font-weight: bold;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
 }
 
 .container {
     max-width: 960px;
     width: 100%;
     margin: 100px auto;
+    background-color: #fff;
+    padding: 30px;
 }
 
 .scroll {
