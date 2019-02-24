@@ -79,20 +79,23 @@ function handleSubmitButton() {
     $('form').on('submit', function(event) {
         event.preventDefault();
         generateFetchRequest();
+        clearInputForm();
     });
+}
+
+function clearInputForm() {
+    $(':checkbox:checked').prop('checked', false);
 }
 
 function createUrl() {
     let checkedStates = [];
-
     $(':checkbox:checked').each(function(i) {
         checkedStates[i] = $(this).val().toLowerCase();
     });
-
     checkedStates.join(',');
-    console.log(checkedStates);
 
     let maxInput = $('.limit').val();
+    // console.log(`https://api.nps.gov/api/v1/parks?api_key=${apiKey}&stateCode=${checkedStates}&limit=${maxInput}`);
     return `https://api.nps.gov/api/v1/parks?api_key=${apiKey}&stateCode=${checkedStates}&limit=${maxInput}`;
 }
 
@@ -111,6 +114,20 @@ function generateFetchRequest() {
 function handleDisplayResults(responseJson) {
     $('.results').empty();
 
+    // if i want to sort by some other parameter
+    // in this example: sorting by park ID (as designated in 
+    // its API documentation)
+    
+    // responseJson.data.sort(function (a, b) {
+    //     if (a.id < b.id) {
+    //         return -1;
+    //       }
+    //       if (a.id > b.id) {
+    //         return 1;
+    //       }
+    //         return 0;
+    // });
+
     let results = [];
     for (let i = 0; i < responseJson.data.length; i++) {
         results.push(`
@@ -118,7 +135,7 @@ function handleDisplayResults(responseJson) {
                 <b>Name:</b> ${responseJson.data[i].fullName}<br>
                 <b>Location:</b> ${responseJson.data[i].states}<br>
                 <b>Description:</b> ${responseJson.data[i].description}<br>
-                <b>Website:</b> <a href="afgadsfd" target="_blank">${responseJson.data[i].url}</a>
+                <b>Website:</b> <a href="${responseJson.data[i].url}" target="_blank">${responseJson.data[i].url}</a>
             </section>
         `);
     }
@@ -126,7 +143,6 @@ function handleDisplayResults(responseJson) {
 
     $('.results').append(results);
 }
-
 
 function renderPage() {
     generateStateOptions();
